@@ -1,0 +1,34 @@
+.container {
+  margin: auto;
+}
+
+.table {
+  text-align: center;
+}
+
+.modal-body {
+  text-align: left;
+}
+
+#ngb-modal-backdrop {
+  z-index: 900 !important; /* or any lower number you want */
+}
+
+/* If you're using modal window too, you might want to adjust its z-index as well */
+ngb-modal-window.d-block.modal.fade.show {
+  z-index: 3000 !important; /* should be higher than backdrop */
+}
+
+.custom-table {
+  background-color: #f0f8ff !important; /* Light blue background */
+  color: #000 !important; /* Black text */
+}
+
+.custom-table thead {
+  background-color: #007bff !important; /* Darker blue for headers */
+  color: white !important;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #e0f2ff !important; /* Lighter blue on hover */
+}

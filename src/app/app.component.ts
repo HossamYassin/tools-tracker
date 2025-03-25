@@ -1,10 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
-  template: `<router-outlet></router-outlet>`,
+  imports: [RouterOutlet, RouterModule, CommonModule],
+  templateUrl: './app.component.html',
 })
-export class AppComponent {}
+export class AppComponent {
+  showLayout: boolean = true;
+  title: string = '';
+
+  constructor(private router: Router) {
+    this.router.events.subscribe(() => {
+      console.log(this.router.url);
+      this.showLayout = this.router.url !== '/';
+      console.log(this.showLayout);
+    });
+  }
+}

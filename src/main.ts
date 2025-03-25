@@ -10,10 +10,16 @@ import { authInterceptor } from './app/auth.interceptor';
 import { ErrorInterceptor } from './app/errors.interceptor';
 import { provideToastr } from 'ngx-toastr';
 import { importProvidersFrom } from '@angular/core';
+import { TransactionsComponent } from './app/transactions/transactions.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  {
+    path: 'transactions',
+    component: TransactionsComponent,
+    canActivate: [AuthGuard],
+  },
   { path: '**', redirectTo: '' },
 ];
 

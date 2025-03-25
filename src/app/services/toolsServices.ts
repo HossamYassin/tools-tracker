@@ -12,9 +12,8 @@ import {
 } from 'rxjs';
 import { environment } from '../environments/environment';
 import { ApiResponse } from '../models/ApiResponse';
-import { Appointment } from '../models/Appointment';
 import { ToolsTransactions } from '../models/ToolsTransactions';
-import { Tool } from '../models/Tool';
+import { BorrowTool, ReturnTool, Tool } from '../models/Tool';
 import { Transaction } from '../models/Transactions';
 
 @Injectable({
@@ -26,7 +25,6 @@ export class ToolsService {
   private apiToolUrl = `${environment.apiUrl}/tools`;
   private retryCount = environment.retryCount;
   private retryDelay = environment.retryDelay;
-  private apiTransactionsUrl = `${environment.apiUrl}/appointments`;
   private http = inject(HttpClient);
 
   geToolsTransactions(): Observable<ApiResponse<ToolsTransactions[]>> {
@@ -141,6 +139,52 @@ export class ToolsService {
     return this.http
       .get<ApiResponse<ToolsTransactions[]>>(
         `${this.apiTransactionsListUrl}/tool/${toolId}`
+      )
+      .pipe(
+        retryWhen((errors) =>
+          errors.pipe(
+            scan((retryCount, error) => {
+              if (retryCount > this.retryCount) {
+                throw error; // Stop retrying after 3 attempts
+              }
+              console.warn(`Retrying... Attempt ${retryCount + 1}`);
+              return retryCount + 1;
+            }, 0),
+            delay(this.retryDelay)
+          )
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  borrowTool(borrowTool: BorrowTool): Observable<ApiResponse<BorrowTool>> {
+    return this.http
+      .put<ApiResponse<BorrowTool>>(
+        `${this.apiTransactionsListUrl}/borrow`,
+        borrowTool
+      )
+      .pipe(
+        retryWhen((errors) =>
+          errors.pipe(
+            scan((retryCount, error) => {
+              if (retryCount > this.retryCount) {
+                throw error; // Stop retrying after 3 attempts
+              }
+              console.warn(`Retrying... Attempt ${retryCount + 1}`);
+              return retryCount + 1;
+            }, 0),
+            delay(this.retryDelay)
+          )
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  returnTool(returnTool: ReturnTool): Observable<ApiResponse<ReturnTool>> {
+    return this.http
+      .put<ApiResponse<ReturnTool>>(
+        `${this.apiTransactionsListUrl}/return`,
+        returnTool
       )
       .pipe(
         retryWhen((errors) =>
