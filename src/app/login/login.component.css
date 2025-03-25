@@ -1,0 +1,22 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.container-fluid {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f8f9fc; /* Light background */
+}
+
+.card {
+  width: 100%;
+}
+
+.bg-login-image img {
+  max-width: 100%;
+  height: auto;
+}
